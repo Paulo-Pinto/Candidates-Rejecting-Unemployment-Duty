@@ -8,6 +8,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "country-list-json": "^1.0.7",
     "vue": "^3.2.32"
   },
   "devDependencies": {

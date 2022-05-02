@@ -9,9 +9,15 @@
   </div>
   <form :class="this.selected == '' ? 'disabled' : 'abled'" ref="editForm">
     <input v-model="name" placeholder="Name" />
-    <input v-model="age" placeholder="Age" />
-    <input v-model="country" placeholder="Country" />
+    <input v-model="age" placeholder="Age" type="number" />
     <input v-model="city" placeholder="City" />
+
+    <input v-model="country" list="countries" placeholder="Country" />
+    <datalist id="countries">
+      <v-for v-for="country in this.countries_list">
+        <option>{{ country.name }}</option>
+      </v-for>
+    </datalist>
   </form>
 
   <select :size="Object.keys(this.list).length" v-model="selected">
@@ -20,6 +26,8 @@
 </template>
 
 <script>
+import { countries } from "country-list-json";
+
 // https://randomapi.com/documentation#options
 const API_URL = `https://randomuser.me/api/`;
 
@@ -36,6 +44,8 @@ export default {
       age: "",
       city: "",
       country: "",
+      // countries
+      countries_list: countries,
     };
   },
   // runs on init
