@@ -1,28 +1,79 @@
 <template>
+	<link
+		href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+		rel="stylesheet"
+		integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+		crossorigin="anonymous"
+	/>
 	<img alt="Vue logo" src="./assets/logo.png" />
 
-	<div class="buttons">
-		<button @click="fetchPeople(1)">Create</button>
-		<button @click="edit()">Change</button>
-		<button @click="remove()">Remove</button>
-		<button @click="resetEdit()">Reset</button>
-	</div>
 	<form :class="this.selected == '' ? 'disabled' : 'abled'" ref="editForm">
 		<input v-model="name" placeholder="Name" />
 		<input v-model="age" placeholder="Age" type="number" />
 		<input v-model="city" placeholder="City" />
 
-		<input v-model="country" list="countries" placeholder="Country" />
+		<input
+			v-model="country"
+			list="countries"
+			placeholder="Country"
+			type="text"
+		/>
 		<datalist id="countries">
-			<v-for v-for="country in this.countries_list" :key="country">
-				<option>{{ country.name }}</option>
-			</v-for>
+			<option v-for="country in this.countries_list" :key="country">
+				{{ country.name }}
+			</option>
 		</datalist>
 	</form>
 
+	<!-- all users -->
 	<select :size="Object.keys(this.list).length" v-model="selected">
 		<option v-for="x in Object.keys(list)" :key="x">{{ x }}</option>
 	</select>
+
+	<!-- user box -->
+	<div id="user" class="position-absolute top-150 start-50 col text-center">
+		<div
+			id="border"
+			class="border border-top-0 border-info rounded-bottom p-4"
+		>
+			<h1 id="name" class="display-4 text-info"></h1>
+			<h2 id="username" class="mb-3"></h2>
+
+			<img
+				alt="User Image"
+				:src="this.image"
+				class="border border-info mb-3"
+			/>
+			<ul id="personal_info" class="list-group">
+				<li
+					class="list-group-item"
+					v-for="ele in [
+						this.name,
+						this.age,
+						this.city,
+						this.country,
+					]"
+					:key="ele"
+				>
+					{{ ele }}
+				</li>
+			</ul>
+		</div>
+		<div class="buttons">
+			<button class="mt-4 mx-2 btn btn-info" @click="fetchPeople(1)">
+				Create
+			</button>
+			<button class="mt-4 mx-2 btn btn-info" @click="update()">
+				Update
+			</button>
+			<button class="mt-4 mx-2 btn btn-info" @click="remove()">
+				Remove
+			</button>
+			<button class="mt-4 mx-2 btn btn-info" @click="resetEdit()">
+				Reset
+			</button>
+		</div>
+	</div>
 </template>
 
 <script>
@@ -33,6 +84,25 @@ const API_URL = `https://randomuser.me/api/`;
 
 export default {
 	name: 'App',
+	// metaInfo: {
+	// 	title: 'Vue CRUD SPA',
+	// 	// meta: [
+	// 	// 	{
+	// 	// 		name: 'description',
+	// 	// 		content:
+	// 	// 			'Perform CRUD operations on the randomuser API. Made with Vue',
+	// 	// 	},
+	// 	// 	{
+	// 	// 		name: 'keywords',
+	// 	// 		content:
+	// 	// 			'Vue, Vue3, HTML, CSS, Bootstrap, Javascript, JS, API, randomuser',
+	// 	// 	},
+	// 	// 	{
+	// 	// 		name: 'author',
+	// 	// 		content: 'Paulo Pinto',
+	// 	// 	},
+	// 	// ],
+	// },
 	data() {
 		return {
 			// stores dictionary of people
@@ -40,6 +110,7 @@ export default {
 			// stores key of curr focused person
 			selected: '',
 			// stores person's values
+			image: '',
 			name: '',
 			age: '',
 			city: '',
@@ -53,11 +124,12 @@ export default {
 		this.fetchPeople(3);
 	},
 	methods: {
-		edit() {
+		update() {
 			// delete old entry
 			delete this.list[this.selected];
 			// add updated entry
 			this.list[this.name] = {
+				image: this.image,
 				name: this.name,
 				age: this.age,
 				country: this.country,
@@ -79,6 +151,7 @@ export default {
 			this.$refs.editForm.reset();
 		},
 		resetHardcode() {
+			this.image = '';
 			this.name = '';
 			this.age = '';
 			this.country = '';
@@ -94,9 +167,10 @@ export default {
 			let vals = await (
 				await fetch(API_URL + '?results=' + quant)
 			).json();
-
+			console.log(vals.results);
 			vals.results.forEach((x) => {
 				const p = {
+					image: x.picture.large,
 					name: x.name.first + ' ' + x.name.last,
 					age: x.dob.age,
 					country: x.location.country,
@@ -104,17 +178,18 @@ export default {
 				};
 
 				this.list[p.name] = p;
+				// select and display new user
+				[this.image, this.name, this.age, this.country, this.city] =
+					Object.values(p);
+				this.selected = p.name;
 			});
 		},
 	},
 	watch: {
 		// "watches" anytime selected variable changes state
 		selected(element) {
-			this.selected = element;
-
-			[this.name, this.age, this.country, this.city] = Object.values(
-				this.list[element]
-			);
+			[this.image, this.name, this.age, this.country, this.city] =
+				Object.values(this.list[element]);
 		},
 	},
 };
@@ -159,3 +234,7 @@ select {
 	width: 24em;
 }
 </style>
+
+// TODO : change to grid view, click opens details details allows for
+editing/deleting vue-meta virt scroll
+https://github.com/rocwang/vue-virtual-scroll-grid#readme
