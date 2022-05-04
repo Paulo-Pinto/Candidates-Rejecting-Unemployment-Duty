@@ -178,11 +178,12 @@ export default {
 				};
 
 				this.list[p.name] = p;
-				// select and display new user
-				[this.image, this.name, this.age, this.country, this.city] =
-					Object.values(p);
-				this.selected = p.name;
 			});
+
+			// select and display new user
+			[this.image, this.name, this.age, this.country, this.city] =
+				Object.values(p);
+			this.selected = p.name;
 		},
 	},
 	watch: {
