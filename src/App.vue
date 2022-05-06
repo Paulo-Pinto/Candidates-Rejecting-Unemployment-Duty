@@ -5,14 +5,37 @@
 		integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
 		crossorigin="anonymous"
 	/>
-	<img alt="Vue logo" src="./assets/logo.png" />
+	<!-- <img alt="Vue logo" src="./assets/logo.png" /> -->
+	<h1 class="display-1 d-flex justify-content-center">Tutor Finder</h1>
 
-	<form :class="this.selected == '' ? 'disabled' : 'abled'" ref="editForm">
-		<input v-model="name" placeholder="Name" />
-		<input v-model="age" placeholder="Age" type="number" />
-		<input v-model="city" placeholder="City" />
+	<!-- :class="this.selected == '' ? 'disabled' : 'abled'" -->
+	<form ref="editForm" class="input-group mb-3 d-flex justify-content-center">
+		<div class="input-group-prepend mx-5">
+			<span class="input-group-text">Name</span>
+		</div>
+		<input class="form-control" v-model="name" placeholder="Name" />
 
+		<!-- TODO : add margin -->
+		<div class="input-group-prepend mx-5">
+			<span class="input-group-text">Age</span>
+		</div>
 		<input
+			class="form-control"
+			v-model="age"
+			placeholder="Age"
+			type="number"
+		/>
+
+		<div class="input-group-prepend">
+			<span class="input-group-text">City</span>
+		</div>
+		<input class="form-control" v-model="city" placeholder="City" />
+
+		<div class="input-group-prepend">
+			<span class="input-group-text">Country</span>
+		</div>
+		<input
+			class="form-control"
 			v-model="country"
 			list="countries"
 			placeholder="Country"
@@ -25,22 +48,22 @@
 		</datalist>
 	</form>
 
-	<div class="buttons">
+	<div class="d-flex justify-content-center">
 		<button class="mt-4 mx-1 btn btn-info" @click="fetchPeople(1)">
 			Create
 		</button>
 		<button class="mt-4 mx-1 btn btn-info" @click="update()">Update</button>
 		<button class="mt-4 mx-1 btn btn-info" @click="remove()">Remove</button>
-		<button class="mt-4 mx-1 btn btn-info" @click="resetEdit()">
+		<!-- <button class="mt-4 mx-1 btn btn-info" @click="resetEdit()">
 			Reset
-		</button>
+		</button> -->
 	</div>
 
 	<!-- all users -->
 	<!-- <select :size="Object.keys(this.list).length" v-model="selected"> -->
-	<select :size="3" v-model="selected">
+	<!-- <select :size="3" v-model="selected">
 		<option v-for="x in Object.keys(list)" :key="x">{{ x }}</option>
-	</select>
+	</select> -->
 
 	<!-- user box -->
 	<!-- <div id="user" class="position-absolute top-150 start-50 col text-center">
@@ -91,31 +114,29 @@
 	<br />
 	<!-- v-for="x in Object.keys(list)" -->
 	<div :length="this.gridLength" class="grid">
-		<div class="item" v-for="x in Object.keys(list)" :key="x">
+		<div class="item" v-for="person in Object.values(list)" :key="person">
 			<!-- user box -->
-			<div @click="this.select(x)" id="user">
+			<div @click="this.select(person)" id="person">
 				<div
 					id="border"
-					class="border border-top-0 border-info rounded-bottom p-4"
+					class="border border-top-0 border-info rounded-bottom p-3 shadow"
 				>
 					<h2 id="username" class="mb-3">
-						<!-- {{ person['image'] }} -->
-						__
+						{{ person.name }}
 					</h2>
 
 					<img
 						alt="User Image"
-						:src="this.image"
+						:src="person.image"
 						class="border border-info mb-3"
 					/>
 					<ul id="personal_info" class="list-group">
 						<li
 							class="list-group-item"
 							v-for="ele in [
-								this.name,
-								this.age,
-								this.city,
-								this.country,
+								person.age + '€ / day',
+								person.city + ', ' + person.country,
+								Object.values(person.skills).join(' and '),
 							]"
 							:key="ele"
 						>
@@ -175,12 +196,12 @@ export default {
 	},
 	// runs on init
 	created() {
-		this.fetchPeople(3);
+		this.fetchPeople(2);
 	},
 	methods: {
 		update() {
 			// delete old entry
-			delete this.list[this.selected];
+			// delete this.list[this.name];
 			// add updated entry
 			this.list[this.name] = {
 				image: this.image,
@@ -191,7 +212,7 @@ export default {
 			};
 			// TODO : update selected
 			// this.selected = p;
-
+			// TODO : UPDATE ISNT WORKING
 			// temp fix
 			this.resetHardcode();
 		},
@@ -212,15 +233,44 @@ export default {
 			this.city = '';
 		},
 		remove() {
-			// TODO : only one command executes !?
-			// this.$refs.editForm.reset();
 			this.resetHardcode();
-			delete this.list[this.selected];
+			delete this.list[this.selected.name];
 		},
 		select(person) {
 			[this.image, this.name, this.age, this.country, this.city] =
 				Object.values(person);
-			console.log(Object.values(person));
+			// console.log(Object.values(person));
+			this.selected = person;
+		},
+		genSkills() {
+			const skills = [
+				'Javascript',
+				'Vue.js',
+				'Bootstrap',
+				'Python',
+				'Kotlin',
+				'Java',
+				'C',
+				'C++',
+			];
+
+			let build = [];
+			let pos = 0;
+
+			// add n skills
+			for (
+				let n = 0;
+				n < 1 + Math.floor(Math.random() * (skills.length - 1));
+				n++
+			) {
+				// if skill has already been chosen, select new one
+				pos = Math.floor(Math.random() * skills.length);
+				console.log(pos + ' ' + skills[pos]);
+				// remove skill from list and add it to return var
+				build.push(skills.splice(pos, 1).toString());
+				console.log('build ' + build);
+			}
+			return build;
 		},
 		async fetchPeople(quant = 1) {
 			let vals = await (
@@ -234,6 +284,7 @@ export default {
 					age: x.dob.age,
 					country: x.location.country,
 					city: x.location.city,
+					skills: this.genSkills(),
 				};
 
 				this.list[p.name] = p;
@@ -247,10 +298,10 @@ export default {
 	},
 	watch: {
 		// "watches" anytime selected variable changes state
-		selected(element) {
-			[this.image, this.name, this.age, this.country, this.city] =
-				Object.values(this.list[element]);
-		},
+		// selected(element) {
+		// 	[this.image, this.name, this.age, this.country, this.city] =
+		// 		Object.values(this.list[element]);
+		// },
 	},
 };
 </script>
@@ -260,11 +311,6 @@ export default {
 #app {
 	align-items: center;
 	padding: 50px;
-}
-
-.buttons {
-	display: flex;
-	justify-content: center;
 }
 
 .disabled {
