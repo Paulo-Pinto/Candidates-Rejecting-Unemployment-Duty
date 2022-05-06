@@ -25,13 +25,25 @@
 		</datalist>
 	</form>
 
+	<div class="buttons">
+		<button class="mt-4 mx-1 btn btn-info" @click="fetchPeople(1)">
+			Create
+		</button>
+		<button class="mt-4 mx-1 btn btn-info" @click="update()">Update</button>
+		<button class="mt-4 mx-1 btn btn-info" @click="remove()">Remove</button>
+		<button class="mt-4 mx-1 btn btn-info" @click="resetEdit()">
+			Reset
+		</button>
+	</div>
+
 	<!-- all users -->
-	<select :size="Object.keys(this.list).length" v-model="selected">
+	<!-- <select :size="Object.keys(this.list).length" v-model="selected"> -->
+	<select :size="3" v-model="selected">
 		<option v-for="x in Object.keys(list)" :key="x">{{ x }}</option>
 	</select>
 
 	<!-- user box -->
-	<div id="user" class="position-absolute top-150 start-50 col text-center">
+	<!-- <div id="user" class="position-absolute top-150 start-50 col text-center">
 		<div
 			id="border"
 			class="border border-top-0 border-info rounded-bottom p-4"
@@ -72,6 +84,46 @@
 			<button class="mt-4 mx-2 btn btn-info" @click="resetEdit()">
 				Reset
 			</button>
+		</div>
+	</div> -->
+
+	<br />
+	<br />
+	<!-- v-for="x in Object.keys(list)" -->
+	<div :length="this.gridLength" class="grid">
+		<div class="item" v-for="x in Object.keys(list)" :key="x">
+			<!-- user box -->
+			<div @click="this.select(x)" id="user">
+				<div
+					id="border"
+					class="border border-top-0 border-info rounded-bottom p-4"
+				>
+					<h2 id="username" class="mb-3">
+						<!-- {{ person['image'] }} -->
+						__
+					</h2>
+
+					<img
+						alt="User Image"
+						:src="this.image"
+						class="border border-info mb-3"
+					/>
+					<ul id="personal_info" class="list-group">
+						<li
+							class="list-group-item"
+							v-for="ele in [
+								this.name,
+								this.age,
+								this.city,
+								this.country,
+							]"
+							:key="ele"
+						>
+							{{ ele }}
+						</li>
+					</ul>
+				</div>
+			</div>
 		</div>
 	</div>
 </template>
@@ -117,6 +169,8 @@ export default {
 			country: '',
 			// countries
 			countries_list: countries,
+			//grid
+			gridLength: 0,
 		};
 	},
 	// runs on init
@@ -163,6 +217,11 @@ export default {
 			this.resetHardcode();
 			delete this.list[this.selected];
 		},
+		select(person) {
+			[this.image, this.name, this.age, this.country, this.city] =
+				Object.values(person);
+			console.log(Object.values(person));
+		},
 		async fetchPeople(quant = 1) {
 			let vals = await (
 				await fetch(API_URL + '?results=' + quant)
@@ -178,12 +237,12 @@ export default {
 				};
 
 				this.list[p.name] = p;
+				this.gridLength++;
+				// select and display new user
+				[this.image, this.name, this.age, this.country, this.city] =
+					Object.values(p);
+				this.selected = p.name;
 			});
-
-			// select and display new user
-			[this.image, this.name, this.age, this.country, this.city] =
-				Object.values(p);
-			this.selected = p.name;
 		},
 	},
 	watch: {
@@ -233,6 +292,23 @@ select {
 	justify-content: center;
 	align-items: center;
 	width: 24em;
+}
+
+.grid {
+	display: grid;
+	/* grid-gap: 20px; */
+	grid-template-columns: repeat(4, 1fr);
+	grid-template-rows: repeat(3, 1fr);
+	grid-column-gap: 10px;
+	grid-row-gap: 10px;
+}
+
+.item {
+	/* border: 3px dashed yellow; */
+	padding: 0px 0;
+	height: fit-content;
+	/* margin: auto; */
+	text-align: center;
 }
 </style>
 
