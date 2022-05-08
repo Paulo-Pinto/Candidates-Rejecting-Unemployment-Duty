@@ -1,7 +1,5 @@
-# Vue 3 + Vite
+# Candidates Rejecting Unemployment Duty (CRUD)
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+This SPA is an offshoot of a [repo](https://github.com/Paulo-Pinto/GetRandomUser) I did a while back, that used jQuery to make calls to the [randomuser API](https://randomuser.me/) and Bootstrap to style how the information was displayed.
 
-## Recommended IDE Setup
-
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar)
+I added CRUD funcionality with a "hiring" narrative, all the while learning a lot about developing with "The Progressive Javascript Framework" [Vuejs](vuejs.org) with [Vite](vite.config.js).
