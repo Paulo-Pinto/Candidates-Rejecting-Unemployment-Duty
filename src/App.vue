@@ -1,3 +1,4 @@
+// TODO : moment.js clock for each user's timezone
 <template>
 	<link
 		href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
@@ -6,36 +7,68 @@
 		crossorigin="anonymous"
 	/>
 	<!-- <img alt="Vue logo" src="./assets/logo.png" /> -->
-	<h1 class="display-1 d-flex justify-content-center">Tutor Finder</h1>
+	<h1 class="display-1 d-flex justify-content-center">
+		Candidates Rejecting Unemployment Duty&nbsp;
+		<span class="text-primary">(CRUD)</span>
+	</h1>
 
+	<div class="d-flex justify-content-center">
+		<button class="mt-4 mx-1 btn btn-success" @click="fetchPeople(1)">
+			New Candidate
+		</button>
+		<button class="mt-4 mx-1 btn btn-warning" @click="update()">
+			Update
+		</button>
+		<button class="mt-4 mx-1 btn btn-danger" @click="remove()">
+			Remove
+		</button>
+		<!-- TODO : Shuffle / Sort button -->
+
+		<!-- <button class="mt-4 mx-1 btn btn-info" @click="resetEdit()">
+			Deselect
+		</button>
+		<button class="mt-4 mx-1 btn btn-dark" @click="shuffle()">
+			Shuffle
+		</button> -->
+	</div>
 	<!-- :class="this.selected == '' ? 'disabled' : 'abled'" -->
-	<form ref="editForm" class="input-group mb-3 d-flex justify-content-center">
-		<div class="input-group-prepend mx-5">
+	<form
+		ref="editForm"
+		class="input-group mt-4 d-flex justify-content-center px-5"
+	>
+		<div class="input-group-prepend">
 			<span class="input-group-text">Name</span>
 		</div>
-		<input class="form-control" v-model="name" placeholder="Name" />
+		<input
+			class="form-control border-secondary rounded-end"
+			v-model="name"
+			placeholder="Name"
+		/>
 
-		<!-- TODO : add margin -->
-		<div class="input-group-prepend mx-5">
+		<div class="input-group-prepend ms-4">
 			<span class="input-group-text">Age</span>
 		</div>
 		<input
-			class="form-control"
+			class="form-control border-secondary rounded-end"
 			v-model="age"
 			placeholder="Age"
 			type="number"
 		/>
 
-		<div class="input-group-prepend">
+		<div class="input-group-prepend ms-4">
 			<span class="input-group-text">City</span>
 		</div>
-		<input class="form-control" v-model="city" placeholder="City" />
+		<input
+			class="form-control border-secondary rounded-end"
+			v-model="city"
+			placeholder="City"
+		/>
 
-		<div class="input-group-prepend">
+		<div class="input-group-prepend ms-4">
 			<span class="input-group-text">Country</span>
 		</div>
 		<input
-			class="form-control"
+			class="form-control border-secondary rounded-end"
 			v-model="country"
 			list="countries"
 			placeholder="Country"
@@ -47,17 +80,6 @@
 			</option>
 		</datalist>
 	</form>
-
-	<div class="d-flex justify-content-center">
-		<button class="mt-4 mx-1 btn btn-info" @click="fetchPeople(1)">
-			Create
-		</button>
-		<button class="mt-4 mx-1 btn btn-info" @click="update()">Update</button>
-		<button class="mt-4 mx-1 btn btn-info" @click="remove()">Remove</button>
-		<!-- <button class="mt-4 mx-1 btn btn-info" @click="resetEdit()">
-			Reset
-		</button> -->
-	</div>
 
 	<!-- all users -->
 	<!-- <select :size="Object.keys(this.list).length" v-model="selected"> -->
@@ -116,7 +138,7 @@
 	<div :length="this.gridLength" class="grid">
 		<div class="item" v-for="person in Object.values(list)" :key="person">
 			<!-- user box -->
-			<div @click="this.select(person)" id="person">
+			<div v-if="hover" @click="this.select(person)" id="person">
 				<div
 					id="border"
 					class="border border-top-0 border-info rounded-bottom p-3 shadow"
@@ -192,6 +214,8 @@ export default {
 			countries_list: countries,
 			//grid
 			gridLength: 0,
+			// hover
+			hover: false,
 		};
 	},
 	// runs on init
@@ -212,6 +236,7 @@ export default {
 			};
 			// TODO : update selected
 			// this.selected = p;
+
 			// TODO : UPDATE ISNT WORKING
 			// temp fix
 			this.resetHardcode();
@@ -241,6 +266,25 @@ export default {
 				Object.values(person);
 			// console.log(Object.values(person));
 			this.selected = person;
+		},
+		shuffle() {
+			let new_list = this.list;
+			const initial_len = this.list.length;
+			console.log('old');
+			console.log(this.list);
+
+			// shuffle list
+			for (let i = 0; i < initial_len; i++) {
+				// get random position
+				pos = Math.floor(Math.random() * this.list.length);
+				// change person from one list to the next
+				new_list.push(this.list[pos]);
+				delete this.list[pos];
+			}
+			// update list
+			tihs.list = new_list;
+			console.log('new');
+			console.log(this.list);
 		},
 		genSkills() {
 			const skills = [
@@ -355,6 +399,10 @@ select {
 	height: fit-content;
 	/* margin: auto; */
 	text-align: center;
+}
+
+.abou::first-letter {
+	color: red;
 }
 </style>
 
