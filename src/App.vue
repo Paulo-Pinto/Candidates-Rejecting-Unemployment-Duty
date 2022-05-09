@@ -1,19 +1,22 @@
 // TODO : moment.js clock for each user's timezone
 <template>
+	<!-- https://stackoverflow.com/a/52483232 -->
 	<link
 		href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
 		rel="stylesheet"
 		integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
 		crossorigin="anonymous"
 	/>
+
 	<h1 class="display-1 d-flex justify-content-center">
 		Citizens Rejecting Unemployment Duty&nbsp;
 		<span class="text-primary">(CRUD)</span>
 	</h1>
 
+	<!-- Buttons -->
 	<div class="d-flex justify-content-center">
-		<button class="mt-4 mx-1 btn btn-success" @click="fetchPeople(1)">
-			New Candidate
+		<button class="mt-4 mx-1 btn btn-success" @click="fetchPeople()">
+			More Candidates
 		</button>
 		<button class="mt-4 mx-1 btn btn-warning" @click="update()">
 			Update
@@ -21,18 +24,16 @@
 		<button class="mt-4 mx-1 btn btn-danger" @click="remove()">
 			Remove
 		</button>
-		<!-- TODO : Shuffle / Sort button -->
-
-		<!-- <button class="mt-4 mx-1 btn btn-info" @click="sort(how?)">
-			Sort
-		</button> -->
 		<button class="mt-4 mx-1 btn btn-dark" @click="shuffle()">
 			Shuffle
 		</button>
+		<!-- TODO : Sort button(s?) -->
 	</div>
 
+	<!-- Input fields -->
 	<form
 		ref="editForm"
+		id="editForm"
 		class="input-group mt-4 d-flex justify-content-center px-5"
 	>
 		<div class="input-group-prepend">
@@ -80,93 +81,39 @@
 		</datalist>
 	</form>
 
-	<!-- all users -->
-	<!-- <select :size="Object.keys(this.list).length" v-model="selected"> -->
-	<!-- <select :size="3" v-model="selected">
-		<option v-for="x in Object.keys(list)" :key="x">{{ x }}</option>
-	</select> -->
-
-	<!-- user box -->
-	<!-- <div id="user" class="position-absolute top-150 start-50 col text-center">
+	<!-- Grid of People -->
+	<div class="grid" v-if="Object.keys(list).length > 0">
+		<!-- Person Card -->
 		<div
-			id="border"
-			class="border border-top-0 border-info rounded-bottom p-4"
-		>
-			<h1 id="name" class="display-4 text-info"></h1>
-			<h2 id="username" class="mb-3"></h2>
-
-			<img
-				alt="User Image"
-				:src="this.image"
-				class="border border-info mb-3"
-			/>
-			<ul id="personal_info" class="list-group">
-				<li
-					class="list-group-item"
-					v-for="ele in [
-						this.name,
-						this.age,
-						this.city,
-						this.country,
-					]"
-					:key="ele"
-				>
-					{{ ele }}
-				</li>
-			</ul>
-		</div>
-		<div class="buttons">
-			<button class="mt-4 mx-2 btn btn-info" @click="fetchPeople(1)">
-				Create
-			</button>
-			<button class="mt-4 mx-2 btn btn-info" @click="update()">
-				Update
-			</button>
-			<button class="mt-4 mx-2 btn btn-info" @click="remove()">
-				Remove
-			</button>
-			<button class="mt-4 mx-2 btn btn-info" @click="resetEdit()">
-				Reset
-			</button>
-		</div>
-	</div> -->
-
-	<br />
-	<br />
-	<!-- grid div" -->
-	<div class="grid">
-		<!-- TODO : this div might be removeable -->
-		<!-- user box -->
-		<div
+			class="bg-white border-top-0 border-info rounded-bottom p-3 shadow card"
 			v-for="person in Object.values(list)"
 			:key="person"
-			:class="person.hover == true ? 'hovered' : 'notHovered'"
-			@click="this.select(person)"
+			:id="person.name"
+			:class="person.hover == true ? 'hovered' : ''"
 			@mouseenter="person.hover = true"
 			@mouseleave="person.hover = false"
-			:id="person.name"
-			class="bg-white border border-top-0 border-info rounded-bottom p-3 shadow item"
+			@click="this.select(person)"
 		>
-			<h2 id="username" class="mb-3">
+			<h2 id="username" class="mb-4">
 				{{ person.name }}
 			</h2>
 
 			<img
 				alt="User Image"
 				:src="person.image"
-				class="border border-info mb-3"
+				class="border border-info mb-4"
 			/>
 			<ul id="personal_info" class="list-group">
 				<li
 					class="list-group-item"
-					v-for="ele in [
+					v-for="field in [
 						person.age + '€ / day',
 						person.city + ', ' + person.country,
 						Object.values(person.skills).join(' and '),
 					]"
-					:key="ele"
+					:key="field"
 				>
-					{{ ele }}
+					{{ field }}
 				</li>
 			</ul>
 		</div>
@@ -214,40 +161,39 @@ export default {
 			country: '',
 			// countries
 			countries_list: countries,
-			//grid
-			gridLength: 0,
-			// hover
-			hover: false,
 		};
 	},
 	// runs on init
 	created() {
 		this.fetchPeople(2);
 	},
+	mounted: function () {
+		window.setInterval(() => {
+			console.log('People -> ' + Object.keys(this.list));
+		}, 3000);
+	},
 	methods: {
 		update() {
-			// delete old entry
-			// delete this.list[this.name];
-			// add updated entry
-			this.list[this.name] = {
-				image: this.image,
-				name: this.name,
-				age: this.age,
-				country: this.country,
-				city: this.city,
-			};
+			// replace values
+			this.list[this.name].image = this.image;
+			this.list[this.name].name = this.name;
+			this.list[this.name].age = this.age;
+			this.list[this.name].country = this.country;
+			this.list[this.name].city = this.city;
+
+			// this.list[this.name] = {
+			// 	image: this.image,
+			// 	name: this.name,
+			// 	age: this.age,
+			// 	country: this.country,
+			// 	city: this.city,
+			// };
 			// TODO : update selected
 			// this.selected = p;
 
 			// TODO : UPDATE ISNT WORKING
 			// temp fix
 			this.resetHardcode();
-		},
-		delete(ele) {
-			delete this.list[ele];
-		},
-		log(obj) {
-			console.log(obj);
 		},
 		resetEdit() {
 			this.$refs.editForm.reset();
@@ -258,35 +204,42 @@ export default {
 			this.age = '';
 			this.country = '';
 			this.city = '';
+			this.$refs.editForm.style['pointer-events'] = 'none';
 		},
 		remove() {
 			this.resetHardcode();
 			delete this.list[this.selected.name];
 		},
 		select(person) {
+			// attributes to display on input boxes
 			[this.image, this.name, this.age, this.country, this.city] =
 				Object.values(person);
-			// console.log(Object.values(person));
+			// save selected person's key
 			this.selected = person;
+			// enable inputs
+			this.$refs.editForm.style['pointer-events'] = 'auto';
 		},
 		shuffle() {
-			let new_list = this.list;
-			const initial_len = this.list.length;
-			console.log('old');
-			console.log(this.list);
+			// temp list
+			let new_list = [];
+			// length has to be consistent for the for loop to finish
+			const initial_len = Object.keys(this.list).length;
 
 			// shuffle list
 			for (let i = 0; i < initial_len; i++) {
 				// get random position
-				pos = Math.floor(Math.random() * this.list.length);
-				// change person from one list to the next
-				new_list.push(this.list[pos]);
-				delete this.list[pos];
+				let pos = Math.floor(
+					Math.random() * Object.keys(this.list).length
+				);
+				// random key from list keys
+				let key = Object.keys(this.list)[pos];
+				new_list[key] = this.list[key];
+
+				// delete for no dupes
+				delete this.list[key];
 			}
-			// update list
-			tihs.list = new_list;
-			console.log('new');
-			console.log(this.list);
+			// replace list
+			this.list = new_list;
 		},
 		genSkills() {
 			const skills = [
@@ -316,7 +269,7 @@ export default {
 			}
 			return build;
 		},
-		async fetchPeople(quant = 1) {
+		async fetchPeople(quant = 2) {
 			let vals = await (
 				await fetch(API_URL + '?results=' + quant)
 			).json();
@@ -329,10 +282,10 @@ export default {
 					country: x.location.country,
 					city: x.location.city,
 					skills: this.genSkills(),
+					hover: false,
 				};
 
 				this.list[p.name] = p;
-				this.gridLength++;
 				// select and display new user
 				[this.image, this.name, this.age, this.country, this.city] =
 					Object.values(p);
@@ -351,7 +304,7 @@ export default {
 </script>
 
 <style>
-/* TODO : Bootstrap */
+/* TODO : Fix narrative */
 #app {
 	align-items: center;
 	padding: 50px;
@@ -372,28 +325,20 @@ export default {
 }
 
 img {
-	margin: 10px;
+	margin: 10px auto;
 	display: block;
-	margin-left: auto;
-	margin-right: auto;
-}
-select {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	width: 24em;
 }
 
 .grid {
 	display: grid;
-	/* grid-gap: 20px; */
+	padding-top: 3em;
 	grid-template-columns: repeat(4, 1fr);
 	grid-template-rows: repeat(1, 1fr);
-	grid-column-gap: 10px;
-	grid-row-gap: 10px;
+	grid-column-gap: 1em;
+	grid-row-gap: 2em;
 }
 
-.item {
+.card {
 	text-align: center;
 }
 
