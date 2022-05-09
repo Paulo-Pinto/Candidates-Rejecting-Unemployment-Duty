@@ -6,9 +6,8 @@
 		integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
 		crossorigin="anonymous"
 	/>
-	<!-- <img alt="Vue logo" src="./assets/logo.png" /> -->
 	<h1 class="display-1 d-flex justify-content-center">
-		Candidates Rejecting Unemployment Duty&nbsp;
+		Citizens Rejecting Unemployment Duty&nbsp;
 		<span class="text-primary">(CRUD)</span>
 	</h1>
 
@@ -24,14 +23,14 @@
 		</button>
 		<!-- TODO : Shuffle / Sort button -->
 
-		<!-- <button class="mt-4 mx-1 btn btn-info" @click="resetEdit()">
-			Deselect
-		</button>
+		<!-- <button class="mt-4 mx-1 btn btn-info" @click="sort(how?)">
+			Sort
+		</button> -->
 		<button class="mt-4 mx-1 btn btn-dark" @click="shuffle()">
 			Shuffle
-		</button> -->
+		</button>
 	</div>
-	<!-- :class="this.selected == '' ? 'disabled' : 'abled'" -->
+
 	<form
 		ref="editForm"
 		class="input-group mt-4 d-flex justify-content-center px-5"
@@ -134,39 +133,42 @@
 
 	<br />
 	<br />
-	<!-- v-for="x in Object.keys(list)" -->
-	<div :length="this.gridLength" class="grid">
-		<div class="item" v-for="person in Object.values(list)" :key="person">
-			<!-- user box -->
-			<div v-if="hover" @click="this.select(person)" id="person">
-				<div
-					id="border"
-					class="border border-top-0 border-info rounded-bottom p-3 shadow"
-				>
-					<h2 id="username" class="mb-3">
-						{{ person.name }}
-					</h2>
+	<!-- grid div" -->
+	<div class="grid">
+		<!-- TODO : this div might be removeable -->
+		<!-- user box -->
+		<div
+			v-for="person in Object.values(list)"
+			:key="person"
+			:class="person.hover == true ? 'hovered' : 'notHovered'"
+			@click="this.select(person)"
+			@mouseenter="person.hover = true"
+			@mouseleave="person.hover = false"
+			:id="person.name"
+			class="bg-white border border-top-0 border-info rounded-bottom p-3 shadow item"
+		>
+			<h2 id="username" class="mb-3">
+				{{ person.name }}
+			</h2>
 
-					<img
-						alt="User Image"
-						:src="person.image"
-						class="border border-info mb-3"
-					/>
-					<ul id="personal_info" class="list-group">
-						<li
-							class="list-group-item"
-							v-for="ele in [
-								person.age + '€ / day',
-								person.city + ', ' + person.country,
-								Object.values(person.skills).join(' and '),
-							]"
-							:key="ele"
-						>
-							{{ ele }}
-						</li>
-					</ul>
-				</div>
-			</div>
+			<img
+				alt="User Image"
+				:src="person.image"
+				class="border border-info mb-3"
+			/>
+			<ul id="personal_info" class="list-group">
+				<li
+					class="list-group-item"
+					v-for="ele in [
+						person.age + '€ / day',
+						person.city + ', ' + person.country,
+						Object.values(person.skills).join(' and '),
+					]"
+					:key="ele"
+				>
+					{{ ele }}
+				</li>
+			</ul>
 		</div>
 	</div>
 </template>
@@ -309,10 +311,8 @@ export default {
 			) {
 				// if skill has already been chosen, select new one
 				pos = Math.floor(Math.random() * skills.length);
-				console.log(pos + ' ' + skills[pos]);
 				// remove skill from list and add it to return var
 				build.push(skills.splice(pos, 1).toString());
-				console.log('build ' + build);
 			}
 			return build;
 		},
@@ -320,7 +320,7 @@ export default {
 			let vals = await (
 				await fetch(API_URL + '?results=' + quant)
 			).json();
-			console.log(vals.results);
+
 			vals.results.forEach((x) => {
 				const p = {
 					image: x.picture.large,
@@ -388,21 +388,21 @@ select {
 	display: grid;
 	/* grid-gap: 20px; */
 	grid-template-columns: repeat(4, 1fr);
-	grid-template-rows: repeat(3, 1fr);
+	grid-template-rows: repeat(1, 1fr);
 	grid-column-gap: 10px;
 	grid-row-gap: 10px;
 }
 
 .item {
-	/* border: 3px dashed yellow; */
-	padding: 0px 0;
-	height: fit-content;
-	/* margin: auto; */
 	text-align: center;
 }
 
-.abou::first-letter {
-	color: red;
+.hovered {
+	/* TODO : scales behind other divs */
+	transform: scale(1.2);
+	transition-duration: 0.25s;
+	transition-timing-function: ease-out;
+	z-index: 999;
 }
 </style>
 
