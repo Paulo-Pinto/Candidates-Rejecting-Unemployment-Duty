@@ -129,25 +129,6 @@ const API_URL = `https://randomuser.me/api/`;
 
 export default {
 	name: 'App',
-	// metaInfo: {
-	// 	title: 'Vue CRUD SPA',
-	// 	// meta: [
-	// 	// 	{
-	// 	// 		name: 'description',
-	// 	// 		content:
-	// 	// 			'Perform CRUD operations on the randomuser API. Made with Vue',
-	// 	// 	},
-	// 	// 	{
-	// 	// 		name: 'keywords',
-	// 	// 		content:
-	// 	// 			'Vue, Vue3, HTML, CSS, Bootstrap, Javascript, JS, API, randomuser',
-	// 	// 	},
-	// 	// 	{
-	// 	// 		name: 'author',
-	// 	// 		content: 'Paulo Pinto',
-	// 	// 	},
-	// 	// ],
-	// },
 	data() {
 		return {
 			// dictionary of people
@@ -334,7 +315,6 @@ img {
 }
 
 .hovered {
-	/* TODO : scales behind other divs */
 	transform: scale(1.2);
 	transition-duration: 0.25s;
 	transition-timing-function: ease-out;
