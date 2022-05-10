@@ -85,10 +85,11 @@
 	<div class="grid" v-if="Object.keys(list).length > 0">
 		<!-- Person Card -->
 		<div
-			class="bg-white border-top-0 border-info rounded-bottom p-3 shadow card"
+			class="border-top-0 rounded-bottom p-3 shadow card"
 			v-for="person in Object.values(list)"
 			:key="person"
 			:id="person.name"
+			:ref="person.name"
 			:class="person.hover == true ? 'hovered' : ''"
 			@mouseenter="person.hover = true"
 			@mouseleave="person.hover = false"
@@ -149,11 +150,11 @@ export default {
 	// },
 	data() {
 		return {
-			// stores dictionary of people
+			// dictionary of people
 			list: {},
-			// stores key of curr focused person
+			// stores key of curr focused person, for deletion purposes
 			selected: '',
-			// stores person's values
+			// stores focused person's values
 			image: '',
 			name: '',
 			age: '',
@@ -168,47 +169,42 @@ export default {
 		this.fetchPeople(2);
 	},
 	mounted: function () {
-		window.setInterval(() => {
-			console.log('People -> ' + Object.keys(this.list));
-		}, 3000);
+		setInterval(() => {
+			console.log(
+				Math.floor(new Date() / 1000) + ' -> ' + Object.keys(this.list)
+			);
+		}, 10000);
 	},
 	methods: {
 		update() {
-			// replace values
+			// TODO : fix error when changing name
+			// replace persons values
 			this.list[this.name].image = this.image;
 			this.list[this.name].name = this.name;
 			this.list[this.name].age = this.age;
 			this.list[this.name].country = this.country;
 			this.list[this.name].city = this.city;
 
-			// this.list[this.name] = {
-			// 	image: this.image,
-			// 	name: this.name,
-			// 	age: this.age,
-			// 	country: this.country,
-			// 	city: this.city,
-			// };
-			// TODO : update selected
-			// this.selected = p;
+			// TODO : a better Toast is possible... see youtube's notification when adding to playlist
+			alert(this.name + "'s values have been updated!");
 
-			// TODO : UPDATE ISNT WORKING
-			// temp fix
-			this.resetHardcode();
-		},
-		resetEdit() {
-			this.$refs.editForm.reset();
+			this.selected = ''; // update selected
+			this.resetHardcode(); // reset form inputs
+			this.highlightPerson(); // removes all highlights if none is selected
 		},
 		resetHardcode() {
+			// remove input values
 			this.image = '';
 			this.name = '';
 			this.age = '';
 			this.country = '';
 			this.city = '';
+			// disable inputs
 			this.$refs.editForm.style['pointer-events'] = 'none';
 		},
 		remove() {
-			this.resetHardcode();
-			delete this.list[this.selected.name];
+			this.resetHardcode(); // reset form inputs
+			delete this.list[this.selected.name]; // remove person
 		},
 		select(person) {
 			// attributes to display on input boxes
@@ -218,6 +214,16 @@ export default {
 			this.selected = person;
 			// enable inputs
 			this.$refs.editForm.style['pointer-events'] = 'auto';
+
+			this.highlightPerson(this.name);
+		},
+		highlightPerson(name) {
+			for (const [key, value] of Object.entries(this.$refs)) {
+				// add border color if key is selected person
+				value[0].style['border-color'] = key == name ? '#5bc0de' : '';
+				value[0].style['border-width'] =
+					key == name ? 'medium' : 'thin';
+			}
 		},
 		shuffle() {
 			// temp list
@@ -235,11 +241,10 @@ export default {
 				let key = Object.keys(this.list)[pos];
 				new_list[key] = this.list[key];
 
-				// delete for no dupes
-				delete this.list[key];
+				delete this.list[key]; // delete for no dupes
 			}
-			// replace list
-			this.list = new_list;
+
+			this.list = new_list; // replace list
 		},
 		genSkills() {
 			const skills = [
@@ -254,7 +259,6 @@ export default {
 			];
 
 			let build = [];
-			let pos = 0;
 
 			// add n skills
 			for (
@@ -263,7 +267,7 @@ export default {
 				n++
 			) {
 				// if skill has already been chosen, select new one
-				pos = Math.floor(Math.random() * skills.length);
+				let pos = Math.floor(Math.random() * skills.length);
 				// remove skill from list and add it to return var
 				build.push(skills.splice(pos, 1).toString());
 			}
@@ -286,42 +290,29 @@ export default {
 				};
 
 				this.list[p.name] = p;
-				// select and display new user
+
+				// fill input fields
 				[this.image, this.name, this.age, this.country, this.city] =
 					Object.values(p);
+
 				this.selected = p.name;
 			});
 		},
 	},
 	watch: {
-		// "watches" anytime selected variable changes state
+		// anytime selected variable changes state, run its assigned function
 		// selected(element) {
-		// 	[this.image, this.name, this.age, this.country, this.city] =
-		// 		Object.values(this.list[element]);
+		// [this.image, this.name, this.age, this.country, this.city] =
+		// 				Object.values(person);
 		// },
 	},
 };
 </script>
 
 <style>
-/* TODO : Fix narrative */
 #app {
 	align-items: center;
 	padding: 50px;
-}
-
-.disabled {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	pointer-events: none;
-}
-
-.abled {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	color: red;
 }
 
 img {
@@ -351,6 +342,4 @@ img {
 }
 </style>
 
-// TODO : change to grid view, click opens details details allows for
-editing/deleting vue-meta virt scroll
-https://github.com/rocwang/vue-virtual-scroll-grid#readme
+// TODO : vue-meta,fix narrative
