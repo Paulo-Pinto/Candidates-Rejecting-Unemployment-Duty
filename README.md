@@ -1,4 +1,4 @@
-# Candidates Rejecting Unemployment Duty (CRUD)
+# Citizens Rejecting Unemployment Duty (CRUD)
 
 This SPA is an offshoot of a [repo](https://github.com/Paulo-Pinto/GetRandomUser) I did a while back, that used jQuery to make calls to the [randomuser API](https://randomuser.me/) and Bootstrap to style how the information was displayed.
 
