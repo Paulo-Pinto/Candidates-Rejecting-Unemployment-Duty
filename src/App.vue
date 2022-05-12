@@ -18,6 +18,7 @@
 		<button class="mt-4 mx-1 btn btn-success" @click="fetchPeople()">
 			More Candidates
 		</button>
+
 		<button class="mt-4 mx-1 btn btn-warning" @click="update()">
 			Update
 		</button>
@@ -158,20 +159,25 @@ export default {
 	},
 	methods: {
 		update() {
-			// TODO : fix error when changing name
+			if (this.selected.name == undefined) {
+				alert('No person selected to update!');
+				return;
+			}
+
+			let p = this.selected['name'];
+
 			// replace persons values
-			this.list[this.name].image = this.image;
-			this.list[this.name].name = this.name;
-			this.list[this.name].age = this.age;
-			this.list[this.name].country = this.country;
-			this.list[this.name].city = this.city;
-
-			// TODO : a better Toast is possible... see youtube's notification when adding to playlist
-			alert(this.name + "'s values have been updated!");
-
+			this.list[p].image = this.image;
+			this.list[p].age = this.age;
+			this.list[p].country = this.country;
+			this.list[p].city = this.city;
+			// this.list[p].name = this.name;
 			this.selected = ''; // update selected
+
 			this.resetHardcode(); // reset form inputs
 			this.highlightPerson(); // removes all highlights if none is selected
+			// TODO : https://getbootstrap.com/docs/5.0/components/toasts/
+			alert(p + "'s values have been updated!");
 		},
 		resetHardcode() {
 			// remove input values
@@ -180,12 +186,22 @@ export default {
 			this.age = '';
 			this.country = '';
 			this.city = '';
+
 			// disable inputs
 			this.$refs.editForm.style['pointer-events'] = 'none';
+			// TODO : make inner inputs tabindex -1
+			// this.$refs.editForm.style['tabindex'] = '-1';
 		},
 		remove() {
 			this.resetHardcode(); // reset form inputs
+
+			if (this.selected.name == undefined) {
+				alert('No person selected to remove!');
+				return;
+			}
+
 			delete this.list[this.selected.name]; // remove person
+			this.selected = ''; // update selected
 		},
 		select(person) {
 			// attributes to display on input boxes
@@ -197,9 +213,14 @@ export default {
 			this.$refs.editForm.style['pointer-events'] = 'auto';
 
 			this.highlightPerson(this.name);
+			// console.log(this.selected);
 		},
 		highlightPerson(name) {
 			for (const [key, value] of Object.entries(this.$refs)) {
+				// other refs
+				if (key == 'editForm') continue;
+				if (value[0] == undefined) continue;
+
 				// add border color if key is selected person
 				value[0].style['border-color'] = key == name ? '#5bc0de' : '';
 				value[0].style['border-width'] =
@@ -269,6 +290,7 @@ export default {
 					skills: this.genSkills(),
 					hover: false,
 				};
+				// TODO - change key from person to unique id
 
 				this.list[p.name] = p;
 
