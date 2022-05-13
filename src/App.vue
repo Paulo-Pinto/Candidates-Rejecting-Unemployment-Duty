@@ -45,7 +45,7 @@
 			v-model="name"
 			placeholder="Name"
 		/>
-
+		<!-- newer version can use inert -->
 		<div class="input-group-prepend ms-4">
 			<span class="input-group-text">Age</span>
 		</div>
@@ -236,11 +236,11 @@ export default {
 			// shuffle list
 			for (let i = 0; i < initial_len; i++) {
 				// get random position
-				let pos = Math.floor(
+				const pos = Math.floor(
 					Math.random() * Object.keys(this.list).length
 				);
 				// random key from list keys
-				let key = Object.keys(this.list)[pos];
+				const key = Object.keys(this.list)[pos];
 				new_list[key] = this.list[key];
 
 				delete this.list[key]; // delete for no dupes
@@ -269,7 +269,7 @@ export default {
 				n++
 			) {
 				// if skill has already been chosen, select new one
-				let pos = Math.floor(Math.random() * skills.length);
+				const pos = Math.floor(Math.random() * skills.length);
 				// remove skill from list and add it to return var
 				build.push(skills.splice(pos, 1).toString());
 			}
