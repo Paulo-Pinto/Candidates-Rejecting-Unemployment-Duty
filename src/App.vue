@@ -217,13 +217,9 @@ export default {
 		},
 		highlightPerson(name) {
 			for (const [key, value] of Object.entries(this.$refs)) {
-				// other refs
-				if (key == 'editForm') continue;
-				if (value[0] == undefined) continue;
-
 				// add border color if key is selected person
-				value[0].style['border-color'] = key == name ? '#5bc0de' : '';
-				value[0].style['border-width'] =
+				value[0]?.style['border-color'] = key == name ? '#5bc0de' : '';
+				value[0]?.style['border-width'] =
 					key == name ? 'medium' : 'thin';
 			}
 		},
@@ -313,6 +309,7 @@ export default {
 </script>
 
 <style>
+/* TODO : https://autoprefixer.github.io/ */
 #app {
 	align-items: center;
 	padding: 50px;
