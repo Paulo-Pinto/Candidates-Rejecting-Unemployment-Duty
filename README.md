@@ -10,6 +10,8 @@ I added CRUD funcionality with a "hiring" narrative, all the while learning a lo
 <img width="120" src="https://getbootstrap.com/docs/5.1/assets/brand/bootstrap-logo-shadow.png" alt="Bootstrap logo">
 </p>
 
-## Sample Execution
+##
 
-![sample_execution](crud%20gif.gif)
+<p align="center">
+  <img src="crud%20gif.gif" />
+</p>
