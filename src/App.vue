@@ -44,6 +44,7 @@
 			class="form-control border-secondary rounded-end"
 			v-model="name"
 			placeholder="Name"
+			disabled="true"
 		/>
 		<!-- newer version can use inert -->
 		<div class="input-group-prepend ms-4">
@@ -109,7 +110,7 @@
 				<li
 					class="list-group-item"
 					v-for="field in [
-						person.age + '€ / day',
+						person.age + '€ / day', // illustrative value
 						person.city + ', ' + person.country,
 						Object.values(person.skills).join(' and '),
 					]"
@@ -120,10 +121,52 @@
 			</ul>
 		</div>
 	</div>
+	<!-- <div class="position-fixed bottom-0 p-3" style="z-index: 11">
+		<div
+			id="liveToast"
+			class="toast"
+			role="alert"
+			aria-live="assertive"
+			aria-atomic="true"
+		>
+			<div class="toast-header">
+				<strong class="me-auto">Email copied!</strong>
+				<button
+					type="button"
+					class="btn-close"
+					data-bs-dismiss="toast"
+					aria-label="Close"
+				></button>
+			</div>
+			<div class="toast-body">Hope to be hearing from you soon :)</div>
+		</div>
+	</div>
+
+	<div
+		class="p-3 bg-secondary progress-bar-striped"
+		style="min-height: 170px"
+	>
+		<b-button
+			class="mb-2"
+			variant="primary"
+			@click="$bvToast.show('example-toast')"
+		>
+			Show toast
+		</b-button>
+		<b-toast id="example-toast" title="BootstrapVue" static no-auto-hide>
+			Hello, world! This is a toast message.
+		</b-toast>
+	</div> -->
 </template>
 
 <script>
 import { countries } from 'country-list-json';
+import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
+import $ from 'jquery';
+
+// Import Bootstrap and BootstrapVue CSS files (order is important)
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap-vue/dist/bootstrap-vue.css';
 
 // https://randomapi.com/documentation#options
 const API_URL = `https://randomuser.me/api/`;
@@ -177,7 +220,7 @@ export default {
 			this.resetHardcode(); // reset form inputs
 			this.highlightPerson(); // removes all highlights if none is selected
 			// TODO : https://getbootstrap.com/docs/5.0/components/toasts/
-			alert(p + "'s values have been updated!");
+			// alert(p + "'s values have been updated!");
 		},
 		resetHardcode() {
 			// remove input values
@@ -218,10 +261,16 @@ export default {
 		highlightPerson(name) {
 			for (const [key, value] of Object.entries(this.$refs)) {
 				// add border color if key is selected person
-				value[0]?.style['border-color'] = key == name ? '#5bc0de' : '';
-				value[0]?.style['border-width'] =
-					key == name ? 'medium' : 'thin';
+				if (value[0] != undefined) {
+					value[0].style['border-color'] =
+						key == name ? '#5bc0de' : '';
+					value[0].style['border-width'] =
+						key == name ? 'medium' : 'thin';
+				}
 			}
+
+			// show confirmation
+			$('#liveToast').toast('show');
 		},
 		shuffle() {
 			// temp list
@@ -306,6 +355,16 @@ export default {
 		// },
 	},
 };
+
+var toastTrigger = document.getElementById('liveToastBtn');
+var toastLiveExample = document.getElementById('liveToast');
+if (toastTrigger) {
+	toastTrigger.addEventListener('click', function () {
+		var toast = new bootstrap.Toast(toastLiveExample);
+
+		toast.show();
+	});
+}
 </script>
 
 <style>

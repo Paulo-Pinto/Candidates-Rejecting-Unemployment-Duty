@@ -8,8 +8,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "bootstrap": "^5.2.0",
+    "bootstrap-vue": "^2.22.0",
     "country-list-json": "^1.0.7",
-    "vue": "^3.2.33",
+    "jquery": "^3.6.0",
+    "vue": "^3.2.37",
     "vue-meta": "^2.4.0",
     "vue-virtual-scroll-grid": "^1.4.2"
   },
