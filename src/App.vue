@@ -48,12 +48,12 @@
 		/>
 		<!-- newer version can use inert -->
 		<div class="input-group-prepend ms-4">
-			<span class="input-group-text">Age</span>
+			<span class="input-group-text">Wage</span>
 		</div>
 		<input
 			class="form-control border-secondary rounded-end"
-			v-model="age"
-			placeholder="Age"
+			v-model="wage"
+			placeholder="Wage"
 			type="number"
 		/>
 
@@ -110,7 +110,7 @@
 				<li
 					class="list-group-item"
 					v-for="field in [
-						person.age + '€ / day', // illustrative value
+						person.wage + '€ / day', // illustrative value
 						person.city + ', ' + person.country,
 						Object.values(person.skills).join(' and '),
 					]"
@@ -211,7 +211,7 @@ export default {
 
 			// replace persons values
 			this.list[p].image = this.image;
-			this.list[p].age = this.age;
+			this.list[p].wage = this.wage;
 			this.list[p].country = this.country;
 			this.list[p].city = this.city;
 			// this.list[p].name = this.name;
@@ -226,7 +226,7 @@ export default {
 			// remove input values
 			this.image = '';
 			this.name = '';
-			this.age = '';
+			this.wage = '';
 			this.country = '';
 			this.city = '';
 
@@ -248,7 +248,7 @@ export default {
 		},
 		select(person) {
 			// attributes to display on input boxes
-			[this.image, this.name, this.age, this.country, this.city] =
+			[this.image, this.name, this.wage, this.country, this.city] =
 				Object.values(person);
 			// save selected person's key
 			this.selected = person;
@@ -270,7 +270,7 @@ export default {
 			}
 
 			// show confirmation
-			$('#liveToast').toast('show');
+			// $('#liveToast').toast('show');
 		},
 		shuffle() {
 			// temp list
@@ -329,7 +329,7 @@ export default {
 				const p = {
 					image: x.picture.large,
 					name: x.name.first + ' ' + x.name.last,
-					age: x.dob.age,
+					wage: x.dob.age,
 					country: x.location.country,
 					city: x.location.city,
 					skills: this.genSkills(),
@@ -340,7 +340,7 @@ export default {
 				this.list[p.name] = p;
 
 				// fill input fields
-				[this.image, this.name, this.age, this.country, this.city] =
+				[this.image, this.name, this.wage, this.country, this.city] =
 					Object.values(p);
 
 				this.selected = p.name;
@@ -350,21 +350,21 @@ export default {
 	watch: {
 		// anytime selected variable changes state, run its assigned function
 		// selected(element) {
-		// [this.image, this.name, this.age, this.country, this.city] =
+		// [this.image, this.name, this.wage, this.country, this.city] =
 		// 				Object.values(person);
 		// },
 	},
 };
 
-var toastTrigger = document.getElementById('liveToastBtn');
-var toastLiveExample = document.getElementById('liveToast');
-if (toastTrigger) {
-	toastTrigger.addEventListener('click', function () {
-		var toast = new bootstrap.Toast(toastLiveExample);
+// var toastTrigger = document.getElementById('liveToastBtn');
+// var toastLiveExample = document.getElementById('liveToast');
+// if (toastTrigger) {
+// 	toastTrigger.addEventListener('click', function () {
+// 		var toast = new bootstrap.Toast(toastLiveExample);
 
-		toast.show();
-	});
-}
+// 		toast.show();
+// 	});
+// }
 </script>
 
 <style>
