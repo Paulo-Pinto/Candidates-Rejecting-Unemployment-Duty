@@ -14,18 +14,23 @@
 	</h1>
 
 	<!-- Buttons -->
-	<div class="d-flex justify-content-center">
-		<button class="mt-4 mx-1 btn btn-success" @click="fetchPeople()">
+	<div
+		class="d-flex justify-content-center flex-sm-row flex-column text-center"
+	>
+		<button
+			class="mt-4 btn btn-success mx-auto mx-md-1"
+			@click="fetchPeople()"
+		>
 			More Candidates
 		</button>
 
-		<button class="mt-4 mx-1 btn btn-warning" @click="update()">
+		<button class="mt-4 btn btn-warning mx-auto mx-md-1" @click="update()">
 			Update
 		</button>
-		<button class="mt-4 mx-1 btn btn-danger" @click="remove()">
+		<button class="mt-4 btn btn-danger mx-auto mx-md-1" @click="remove()">
 			Remove
 		</button>
-		<button class="mt-4 mx-1 btn btn-dark" @click="shuffle()">
+		<button class="mt-4 btn btn-dark mx-auto mx-md-1" @click="shuffle()">
 			Shuffle
 		</button>
 		<!-- TODO : Sort button(s?) -->
@@ -84,10 +89,13 @@
 	</form>
 
 	<!-- Grid of People -->
-	<div class="grid" v-if="Object.keys(list).length > 0">
+	<div
+		class="row row-cols-auto justify-content-evenly"
+		v-if="Object.keys(list).length > 0"
+	>
 		<!-- Person Card -->
 		<div
-			class="border-top-0 rounded-bottom p-3 shadow card"
+			class="border-top-0 rounded-bottom p-3 shadow card flex-even"
 			v-for="person in Object.values(list)"
 			:key="person"
 			:id="person.name"
