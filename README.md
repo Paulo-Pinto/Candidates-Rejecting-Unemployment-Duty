@@ -2,7 +2,7 @@
 
 This SPA is an offshoot of a [repo](https://github.com/Paulo-Pinto/GetRandomUser) I did a while back, that used jQuery to make calls to the [randomuser API](https://randomuser.me/) and Bootstrap to style how the information was displayed.
 
-I added CRUD funcionality with a "hiring" narrative, all the while learning a lot about developing with <i>The Progressive Javascript Framework</i> [Vuejs](vuejs.org) with [Vite](vite.config.js).
+I added CRUD funcionality with a "hiring" narrative, all the while learning a lot about developing with <i>The Progressive Javascript Framework</i> [Vuejs](https://vuejs.org/) with [Vite](https://vitejs.dev/).
 
 <p align="center">
 <img width="100" src="https://vitejs.dev/logo.svg" alt="Vite logo">
