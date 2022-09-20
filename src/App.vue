@@ -1,13 +1,5 @@
 // TODO : moment.js clock for each user's timezone
 <template>
-	<!-- https://stackoverflow.com/a/52483232 -->
-	<link
-		href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-		rel="stylesheet"
-		integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-		crossorigin="anonymous"
-	/>
-
 	<h1 class="display-1 d-flex justify-content-center">
 		Citizens Rejecting Unemployment Duty&nbsp;
 		<span class="text-primary">(CRUD)</span>
@@ -40,7 +32,7 @@
 	<form
 		ref="editForm"
 		id="editForm"
-		class="input-group mt-4 d-flex justify-content-center px-5"
+		class="input-group mt-4 d-flex justify-content-center px-5 mb-4"
 	>
 		<div class="input-group-prepend">
 			<span class="input-group-text">Name</span>
@@ -95,7 +87,7 @@
 	>
 		<!-- Person Card -->
 		<div
-			class="border-top-0 rounded-bottom p-3 shadow card flex-even"
+			class="border-top-0 rounded-bottom p-3 shadow card flex-even my-3 my-md-2"
 			v-for="person in Object.values(list)"
 			:key="person"
 			:id="person.name"
