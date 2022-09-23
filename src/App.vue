@@ -1,9 +1,12 @@
 // TODO : moment.js clock for each user's timezone
 <template>
-	<h1 class="display-1 d-flex justify-content-center">
-		Citizens Rejecting Unemployment Duty&nbsp;
-		<span class="text-primary">(CRUD)</span>
-	</h1>
+	<div class="d-flex justify-content-center">
+		<h1 class="display-1 d-none d-md-block collapse collapse-horizontal">
+			Citizens Rejecting Unemployment Duty&nbsp;
+		</h1>
+
+		<span class="display-1 text-primary">(CRUD)</span>
+	</div>
 
 	<!-- Buttons -->
 	<div
@@ -32,10 +35,10 @@
 	<form
 		ref="editForm"
 		id="editForm"
-		class="input-group mt-4 d-flex justify-content-center px-5 mb-4"
+		class="input-group d-flex justify-content-center px-5 my-4"
 	>
 		<div class="input-group-prepend">
-			<span class="input-group-text">Name</span>
+			<span class="input-group-text rounded-start-input">Name</span>
 		</div>
 		<input
 			class="form-control border-secondary rounded-end"
@@ -45,7 +48,7 @@
 		/>
 		<!-- newer version can use inert -->
 		<div class="input-group-prepend ms-4">
-			<span class="input-group-text">Wage</span>
+			<span class="input-group-text rounded-start-input">Wage</span>
 		</div>
 		<input
 			class="form-control border-secondary rounded-end"
@@ -55,7 +58,7 @@
 		/>
 
 		<div class="input-group-prepend ms-4">
-			<span class="input-group-text">City</span>
+			<span class="input-group-text rounded-start-input">City</span>
 		</div>
 		<input
 			class="form-control border-secondary rounded-end"
@@ -64,7 +67,7 @@
 		/>
 
 		<div class="input-group-prepend ms-4">
-			<span class="input-group-text">Country</span>
+			<span class="input-group-text rounded-start-input">Country</span>
 		</div>
 		<input
 			class="form-control border-secondary rounded-end"
@@ -374,6 +377,18 @@ export default {
 	padding: 50px;
 }
 
+@media only screen and (max-width: 992px) {
+	#app {
+		padding: 20px;
+	}
+}
+
+@media only screen and (max-width: 576px) {
+	#app {
+		padding: 5px;
+	}
+}
+
 img {
 	margin: 10px auto;
 	display: block;
@@ -397,6 +412,12 @@ img {
 	transition-duration: 0.25s;
 	transition-timing-function: ease-out;
 	z-index: 999;
+}
+
+.rounded-start-input {
+	border-radius: 0 !important;
+	border-start-start-radius: 0.375rem !important;
+	border-end-start-radius: 0.375rem !important;
 }
 </style>
 
