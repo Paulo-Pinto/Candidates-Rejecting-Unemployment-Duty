@@ -12,6 +12,7 @@
 		"bootstrap-vue": "^2.22.0",
 		"country-list-json": "^1.0.7",
 		"jquery": "^3.6.1",
+		"rollup-plugin-vue": "^6.0.0",
 		"vue": "^3.2.39",
 		"vue-meta": "^2.4.0",
 		"vue-virtual-scroll-grid": "^1.7.1"
