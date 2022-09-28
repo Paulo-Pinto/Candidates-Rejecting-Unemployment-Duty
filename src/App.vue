@@ -10,72 +10,90 @@
 
 	<!-- Buttons -->
 	<div
-		class="d-flex justify-content-center flex-sm-row flex-column text-center"
+		class="justify-content-center row row-cols-2 row-cols-md-4 text-center"
 	>
-		<button
-			class="mt-4 btn btn-success mx-auto mx-md-1"
-			@click="fetchPeople()"
-		>
-			More Candidates
-		</button>
+		<div class="col col-sm-auto">
+			<button class="mt-4 btn btn-success px-3" @click="fetchPeople()">
+				More Candidates
+			</button>
+		</div>
 
-		<button class="mt-4 btn btn-warning mx-auto mx-md-1" @click="update()">
-			Update
-		</button>
-		<button class="mt-4 btn btn-danger mx-auto mx-md-1" @click="remove()">
-			Remove
-		</button>
-		<button class="mt-4 btn btn-dark mx-auto mx-md-1" @click="shuffle()">
-			Shuffle
-		</button>
-		<!-- TODO : Sort button(s?) -->
+		<div class="col col-sm-auto">
+			<button class="mt-4 btn btn-warning px-3" @click="update()">
+				Update
+			</button>
+		</div>
+
+		<div class="col col-sm-auto">
+			<button class="mt-4 btn btn-danger px-3" @click="remove()">
+				Remove
+			</button>
+		</div>
+
+		<div class="col col-sm-auto">
+			<button class="mt-4 btn btn-dark px-3" @click="shuffle()">
+				Shuffle
+			</button>
+		</div>
 	</div>
 
 	<!-- Input fields -->
 	<form
 		ref="editForm"
 		id="editForm"
-		class="input-group d-flex justify-content-center px-5 my-4"
+		class="input-group row row-cols-1 row-cols-sm-2 row-cols-lg-4 px-5 my-4"
 	>
-		<div class="input-group-prepend">
-			<span class="input-group-text rounded-start-input">Name</span>
+		<div class="col d-flex my-2">
+			<div class="input-group-prepend ms-4">
+				<span class="input-group-text rounded-start-input">Name</span>
+			</div>
+			<input
+				class="form-control border-secondary rounded-end-input"
+				v-model="name"
+				placeholder="Name"
+				disabled="true"
+			/>
 		</div>
-		<input
-			class="form-control border-secondary rounded-end"
-			v-model="name"
-			placeholder="Name"
-			disabled="true"
-		/>
-		<!-- newer version can use inert -->
-		<div class="input-group-prepend ms-4">
-			<span class="input-group-text rounded-start-input">Wage</span>
-		</div>
-		<input
-			class="form-control border-secondary rounded-end"
-			v-model="wage"
-			placeholder="Wage"
-			type="number"
-		/>
 
-		<div class="input-group-prepend ms-4">
-			<span class="input-group-text rounded-start-input">City</span>
+		<div class="col d-flex my-2">
+			<!-- newer version can use inert -->
+			<div class="input-group-prepend ms-4">
+				<span class="input-group-text rounded-start-input">Wage</span>
+			</div>
+			<input
+				class="form-control border-secondary rounded-end-input"
+				v-model="wage"
+				placeholder="Wage"
+				type="number"
+			/>
 		</div>
-		<input
-			class="form-control border-secondary rounded-end"
-			v-model="city"
-			placeholder="City"
-		/>
 
-		<div class="input-group-prepend ms-4">
-			<span class="input-group-text rounded-start-input">Country</span>
+		<div class="col d-flex my-2">
+			<div class="input-group-prepend ms-4">
+				<span class="input-group-text rounded-start-input">City</span>
+			</div>
+			<input
+				class="form-control border-secondary rounded-end-input"
+				v-model="city"
+				placeholder="City"
+			/>
 		</div>
-		<input
-			class="form-control border-secondary rounded-end"
-			v-model="country"
-			list="countries"
-			placeholder="Country"
-			type="text"
-		/>
+
+		<div class="col d-flex my-2">
+			<div class="input-group-prepend ms-4">
+				<span class="input-group-text rounded-start-input"
+					>Country</span
+				>
+			</div>
+			<input
+				class="form-control border-secondary rounded-end-input"
+				v-model="country"
+				list="countries"
+				placeholder="Country"
+				type="text"
+			/>
+		</div>
+
 		<datalist id="countries">
 			<option v-for="country in this.countries_list" :key="country">
 				{{ country.name }}
@@ -419,6 +437,12 @@ img {
 	border-start-start-radius: 0.375rem !important;
 	border-end-start-radius: 0.375rem !important;
 }
+
+.rounded-end-input {
+	border-radius: 0 !important;
+	border-end-end-radius: 0.375rem !important;
+	border-start-end-radius: 0.375rem !important;
+}
 </style>
 
-// TODO : vue-meta,fix narrative
+<!-- npm run dev -->
