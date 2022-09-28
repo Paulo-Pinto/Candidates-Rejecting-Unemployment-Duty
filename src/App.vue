@@ -106,41 +106,43 @@
 		class="row row-cols-auto justify-content-evenly"
 		v-if="Object.keys(list).length > 0"
 	>
-		<!-- Person Card -->
-		<div
-			class="border-top-0 rounded-bottom p-3 shadow card flex-even my-3 my-md-2"
-			v-for="person in Object.values(list)"
-			:key="person"
-			:id="person.name"
-			:ref="person.name"
-			:class="person.hover == true ? 'hovered' : ''"
-			@mouseenter="person.hover = true"
-			@mouseleave="person.hover = false"
-			@click="this.select(person)"
-		>
-			<h2 id="username" class="mb-4">
-				{{ person.name }}
-			</h2>
+		<TransitionGroup name="fade" type="animation">
+			<!-- Person Card -->
+			<li
+				class="border-top-0 rounded-bottom p-3 shadow card flex-even my-3 my-md-2"
+				v-for="person in Object.values(list)"
+				:key="person"
+				:id="person.name"
+				:ref="person.name"
+				:class="person.hover == true ? 'hovered' : ''"
+				@mouseenter="person.hover = true"
+				@mouseleave="person.hover = false"
+				@click="this.select(person)"
+			>
+				<h2 id="username" class="mb-4">
+					{{ person.name }}
+				</h2>
 
-			<img
-				alt="User Image"
-				:src="person.image"
-				class="border border-info mb-4"
-			/>
-			<ul id="personal_info" class="list-group">
-				<li
-					class="list-group-item"
-					v-for="field in [
-						person.wage + '€ / day', // illustrative value
-						person.city + ', ' + person.country,
-						Object.values(person.skills).join(' and '),
-					]"
-					:key="field"
-				>
-					{{ field }}
-				</li>
-			</ul>
-		</div>
+				<img
+					alt="User Image"
+					:src="person.image"
+					class="border border-info mb-4"
+				/>
+				<ul id="personal_info" class="list-group">
+					<li
+						class="list-group-item"
+						v-for="field in [
+							person.wage + '€ / day', // illustrative value
+							person.city + ', ' + person.country,
+							Object.values(person.skills).join(' and '),
+						]"
+						:key="field"
+					>
+						{{ field }}
+					</li>
+				</ul>
+			</li>
+		</TransitionGroup>
 	</div>
 	<!-- <div class="position-fixed bottom-0 p-3" style="z-index: 11">
 		<div
@@ -429,7 +431,7 @@ img {
 	transform: scale(1.2);
 	transition-duration: 0.25s;
 	transition-timing-function: ease-out;
-	z-index: 999;
+	/* z-index: 999; */
 }
 
 .rounded-start-input {
@@ -442,6 +444,22 @@ img {
 	border-radius: 0 !important;
 	border-end-end-radius: 0.375rem !important;
 	border-start-end-radius: 0.375rem !important;
+}
+
+/* 1. declare transition */
+.fade-move{
+	transition: all 0.75s cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+/* Remove */
+.fade-leave-to {
+	animation-duration: 0.3s;
+	opacity: 0;
+	transform: scaleX(0.01) scaleY(0.01);
+}
+
+.fade-leave-active {
+	position: absolute;
 }
 </style>
 
